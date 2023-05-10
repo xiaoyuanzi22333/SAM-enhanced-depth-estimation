@@ -7,6 +7,11 @@ git clone https://github.com/xiaoyuanzi22333/COMP4901_Final.git
 cd COMP4901_Final
 ```
 
+***prepare the dataset***
+
+you can directly downlaod it from https://www.kaggle.com/datasets/sohaibanwaar1203/image-depth-estimation and put them in ./dataset
+
+
 ***prepare the package***
 ```bash
 pip install 'git+https://github.com/facebookresearch/segment-anything.git'
