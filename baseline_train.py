@@ -7,8 +7,6 @@ from  torch.utils.data import DataLoader
 from tqdm import tqdm
 from model.Unet import pix2pix
 
-def CrossEntropyLoss_func(loss_weights):
-    return torch.nn.CrossEntropyLoss(loss_weights, ignore_index=-1)
 
 type = 'train'
 batch_size = 16
@@ -29,23 +27,25 @@ Data_train = DataLoader(Dataset, batch_size=batch_size, shuffle=True)
 
 model = pix2pix()
 model = model.cuda(cuda_device)
-L1_loss = torch.nn.L1Loss()
+loss = torch.nn.MSELoss()
     
-optimizer = torch.optim.Adam(model.parameters(),lr = 1e-3, betas = (0.5, 0.999))
+optimizer = torch.optim.Adam(model.parameters(), lr = 1e-3, betas = (0.5, 0.999))
 num_epochs = 10
 
 for epoch in range(num_epochs):
     L1 = 0.0
-    for img, label in tqdm(Data_train):
+    for img, label, kysten in tqdm(Data_train):
         if len(img) != batch_size:
                 continue
         
         img = img.cuda(cuda_device)
-        label = label.cuda(cuda_device)
+        label = label.float().cuda(cuda_device)
         
         output = model(img)
         
-        L1 = L1_loss(output,label)
+        # print(torch.max(label))
+        # print(torch.min(label))
+        L1 = loss(output,label)
         
         optimizer.zero_grad()
         L1.backward()
